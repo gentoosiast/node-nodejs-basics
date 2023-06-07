@@ -15,7 +15,10 @@ const transform = async () => {
   });
 
   pipeline(process.stdin, reverseTransform, process.stdout, (err) => {
-    console.error(`Error: ${err}`);
+    if (err) {
+      console.error(`An error occured: ${err}`);
+      process.exitCode = 1;
+    }
   });
 };
 
