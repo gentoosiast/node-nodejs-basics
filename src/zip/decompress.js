@@ -20,7 +20,7 @@ const decompress = async () => {
     const ws = destFh.createWriteStream();
     const gunzip = zlib.createGunzip();
 
-    pipeline(rs, gunzip, ws, (err) => {
+    await pipeline(rs, gunzip, ws, (err) => {
       if (err) {
         console.error(`An error occured: ${err}`);
         process.exitCode = 1;

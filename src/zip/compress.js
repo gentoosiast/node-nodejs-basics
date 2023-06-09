@@ -20,7 +20,7 @@ const compress = async () => {
     const ws = destFh.createWriteStream();
     const gzip = zlib.createGzip();
 
-    pipeline(rs, gzip, ws, (err) => {
+    await pipeline(rs, gzip, ws, (err) => {
       if (err) {
         console.error(`An error occured: ${err}`);
         process.exitCode = 1;
