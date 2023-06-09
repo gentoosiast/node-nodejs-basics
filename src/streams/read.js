@@ -1,3 +1,4 @@
+import { once } from "node:events";
 import fsPromises from "node:fs/promises";
 import path from "node:path";
 import { getModuleDirectory } from "../utils/fs.js";
@@ -12,7 +13,9 @@ const read = async () => {
   try {
     const fh = await fsPromises.open(FILE);
     const rs = fh.createReadStream();
-    rs.pipe(process.stdout);
+    const stream = rs.pipe(process.stdout);
+
+    await once(stream, "finish");
   } catch {
     throw new Error(ERROR_MESSAGE);
   }

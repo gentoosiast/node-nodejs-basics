@@ -1,3 +1,4 @@
+import { once } from "node:events";
 import fsPromises from "node:fs/promises";
 import path from "node:path";
 import { getModuleDirectory } from "../utils/fs.js";
@@ -12,8 +13,9 @@ const write = async () => {
   try {
     const fh = await fsPromises.open(FILE, "w");
     const ws = fh.createWriteStream();
+    const stream = process.stdin.pipe(ws);
 
-    process.stdin.pipe(ws);
+    await once(stream, "finish");
   } catch {
     throw new Error(ERROR_MESSAGE);
   }
