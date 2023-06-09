@@ -1,5 +1,6 @@
+const JOIN_SEPARATOR = ", ";
+
 const parseArgs = () => {
-  const JOIN_SEPARATOR = ", ";
   const args = process.argv.slice(2); // skip path to Node.js binary & path to executed script
   const props = [];
 
