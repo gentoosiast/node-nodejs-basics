@@ -11,20 +11,24 @@ const copy = async () => {
   const ERROR_MESSAGE = "FS operation failed";
 
   try {
-    const dirEnts = await fsPromises.readdir(SRC_DIRECTORY, {
-      withFileTypes: true,
-    });
-    await fsPromises.mkdir(DEST_DIRECTORY);
+    const [dirEnts] = await Promise.all([
+      fsPromises.readdir(SRC_DIRECTORY, {
+        withFileTypes: true,
+      }),
+      fsPromises.mkdir(DEST_DIRECTORY),
+    ]);
 
-    for (const dirEnt of dirEnts) {
-      if (dirEnt.isFile()) {
-        await fsPromises.copyFile(
+    const copyPromises = dirEnts
+      .filter((dirEnt) => dirEnt.isFile())
+      .map((dirEnt) =>
+        fsPromises.copyFile(
           path.resolve(SRC_DIRECTORY, dirEnt.name),
           path.resolve(DEST_DIRECTORY, dirEnt.name),
           fsPromises.constants.COPYFILE_EXCL
-        );
-      }
-    }
+        )
+      );
+
+    await Promise.all(copyPromises);
   } catch {
     throw Error(ERROR_MESSAGE);
   }
