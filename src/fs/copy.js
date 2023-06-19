@@ -11,6 +11,8 @@ const ERROR_MESSAGE = "FS operation failed";
 
 const copy = async () => {
   try {
+    await fsPromises.access(SRC_DIRECTORY);
+
     const [dirEnts] = await Promise.all([
       fsPromises.readdir(SRC_DIRECTORY, {
         withFileTypes: true,
