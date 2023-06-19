@@ -1,4 +1,5 @@
 import { pipeline, Transform } from "node:stream";
+import os from "node:os";
 
 const transform = async () => {
   const reverseTransform = new Transform({
@@ -10,7 +11,7 @@ const transform = async () => {
         .reverse("")
         .join("");
 
-      callback(null, `${reversedStr}\n`);
+      callback(null, `${reversedStr}${os.EOL}`);
     },
   });
 
