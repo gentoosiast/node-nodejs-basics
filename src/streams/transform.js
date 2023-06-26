@@ -1,4 +1,5 @@
-import { pipeline, Transform } from "node:stream";
+import { Transform } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import os from "node:os";
 
 const transform = async () => {
@@ -15,12 +16,12 @@ const transform = async () => {
     },
   });
 
-  await pipeline(process.stdin, reverseTransform, process.stdout, (err) => {
-    if (err) {
-      console.error(`An error occured: ${err}`);
-      process.exitCode = 1;
-    }
-  });
+  try {
+    await pipeline(process.stdin, reverseTransform, process.stdout);
+  } catch (err) {
+    console.error(`An error occured: ${err}`);
+    process.exitCode = 1;
+  }
 };
 
 await transform();
